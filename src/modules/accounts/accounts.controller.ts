@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query, ParseArrayPipe } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { Account } from '@prisma/client';
 import { CreateAccountDto } from './dto/create-account.dto';
@@ -18,9 +18,15 @@ export class AccountsController {
     return this.accountsService.findAll();
   }
 
+  @Get('delete')
+  deleteByIds(@Query('ids', new ParseArrayPipe({ items: Number, separator: ',' })) ids: number[]) {
+    return `Del users ${ids}`;
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Account | null> {
-    return this.accountsService.findOne(Number(id));
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Account | null> {
+    console.log(id, id);
+    return this.accountsService.findOne(id);
   }
 
   @Patch(':id')
@@ -29,7 +35,7 @@ export class AccountsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<Account> {
-    return this.accountsService.remove(Number(id));
+  remove(@Param('id', ParseIntPipe) id: number): Promise<Account> {
+    return this.accountsService.remove(id);
   }
 }

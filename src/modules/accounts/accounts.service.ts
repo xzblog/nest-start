@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/providers/prisma/prisma.service';
 import { Prisma, Account } from '@prisma/client';
 import { CreateAccountDto } from './dto/create-account.dto';
+import { PrismaService } from 'src/providers/prisma/prisma.service';
 
 @Injectable()
 export class AccountsService {
@@ -17,7 +17,6 @@ export class AccountsService {
       throw new ConflictException('用户已存在');
     }
 
-    // const hashedPassword = await bcrypt.hash(createAccountDto.password, 10);
     return this.prisma.account.create({
       data: {
         username: username,
@@ -39,8 +38,16 @@ export class AccountsService {
     });
   }
 
-  findAll(): Promise<Account[]> {
-    return this.prisma.account.findMany();
+  async findAll() {
+    return this.prisma.account.findMany({
+      include: {
+        roles: {
+          include: {
+            role: true
+          }
+        }
+      }
+    });
   }
 
   findOne(id: number): Promise<Account | null> {
@@ -49,7 +56,11 @@ export class AccountsService {
         id: id
       },
       include: {
-        roles: true
+        roles: {
+          include: {
+            role: true
+          }
+        }
       }
     });
   }
