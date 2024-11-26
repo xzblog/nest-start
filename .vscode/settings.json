@@ -1,0 +1,22 @@
+{
+  "editor.tabSize": 2,
+  // 保存时格式化
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // 开启 eslint
+  "eslint.enable": true,
+  // 开启 prettier
+  "prettier.enable": true,
+  // 开启stylelint
+  "stylelint.enable": true,
+
+  // 保存时修复eslint 和 stylelint报错
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+
+  "npm.packageManager": "pnpm"
+}

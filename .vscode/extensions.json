@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "mikestead.dotenv",
+    "steoates.autoimport",
+    "formulahendry.auto-rename-tag",
+    "EditorConfig.EditorConfig",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "stylelint.vscode-stylelint",
+    "eamodio.gitlens"
+  ]
+}
