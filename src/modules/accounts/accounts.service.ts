@@ -1,7 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { Prisma, Account } from '@prisma/client';
 import { CreateAccountDto } from './dto/create-account.dto';
-import { PrismaService } from 'src/providers/prisma/prisma.service';
+import { PrismaService } from 'src/common/providers/prisma/prisma.service';
+import { encrypt } from 'src/utils/helper';
 
 @Injectable()
 export class AccountsService {
@@ -17,13 +18,16 @@ export class AccountsService {
       throw new ConflictException('用户已存在');
     }
 
+    const { password: encryptPassword, salt } = await encrypt(password);
+    console.log(encryptPassword, salt);
     return this.prisma.account.create({
       data: {
-        username: username,
-        password: password,
+        username,
+        password: encryptPassword,
+        salt,
         ...rest,
         roles: {
-          create: roleIds.map((roleId) => ({
+          create: roleIds.map(roleId => ({
             roleId: roleId
           }))
         }

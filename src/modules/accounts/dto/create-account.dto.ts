@@ -1,4 +1,13 @@
-import { IsArray, IsDate, IsEmail, IsMobilePhone, IsNotEmpty, IsString, Length, MinLength } from 'class-validator';
+import {
+  IsArray,
+  IsDateString,
+  IsEmail,
+  IsMobilePhone,
+  IsNotEmpty,
+  IsString,
+  Length,
+  MinLength
+} from 'class-validator';
 
 export class CreateAccountDto {
   @Length(5, 10, { message: 'userName长度应在5到10个字符之间' })
@@ -8,14 +17,12 @@ export class CreateAccountDto {
   @IsString()
   readonly nickname: string;
 
+  @IsNotEmpty()
   @MinLength(6, { message: '密码长度应大于6位' })
   readonly password: string;
 
   @IsMobilePhone('zh-CN')
   readonly telephone?: string;
-
-  @IsDate()
-  birthDate: Date;
 
   @IsEmail()
   readonly email?: string;

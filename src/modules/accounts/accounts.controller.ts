@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query, ParseArrayPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { Account } from '@prisma/client';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { CurrentSysUser } from 'src/common/decorators/currentSysUser.decorator';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('accounts')
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
@@ -18,9 +21,9 @@ export class AccountsController {
     return this.accountsService.findAll();
   }
 
-  @Get('delete')
-  deleteByIds(@Query('ids', new ParseArrayPipe({ items: Number, separator: ',' })) ids: number[]) {
-    return `Del users ${ids}`;
+  @Get('currentUser')
+  getCurrentUser(@CurrentSysUser() account: Account): Promise<Account> {
+    return this.accountsService.findOne(account.id);
   }
 
   @Get(':id')

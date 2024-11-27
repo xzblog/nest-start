@@ -3,7 +3,6 @@
   // 保存时格式化
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
 
   // 开启 eslint
   "eslint.enable": true,
@@ -12,11 +11,15 @@
   // 开启stylelint
   "stylelint.enable": true,
 
-  // 保存时修复eslint 和 stylelint报错
+  // 保存时修复prettier错误, 根据.prettierrc配置格式化
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.fixAll.stylelint": "explicit"
+    "source.fixAll": "explicit"
   },
+
+  // 不在空括号内添加空格
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
 
   "npm.packageManager": "pnpm"
 }
