@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { basicAuthOptions, generateSwaggerApi } from './swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +14,7 @@ async function bootstrap() {
   // 全局异常过滤器
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  // 参数校验
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // 会自动删除未列入白名单的属性（验证类中没有使用装饰器的属性）
@@ -21,6 +23,14 @@ async function bootstrap() {
       disableErrorMessages: process.env.NODE_ENV === 'production' // 生产环境不提示具体的错误信息
     })
   );
+
+  app.setGlobalPrefix('api');
+  generateSwaggerApi(app, {
+    route: 'api-doc',
+    title: '接口文档',
+    description: '接口文档',
+    version: 'v1.0.0'
+  });
 
   await app.listen(process.env.PORT ?? 3000);
 }

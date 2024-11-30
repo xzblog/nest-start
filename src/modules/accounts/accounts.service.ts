@@ -1,8 +1,29 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { Prisma, Account } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { PrismaService } from 'src/common/providers/prisma/prisma.service';
 import { encrypt } from 'src/utils/helper';
+
+const selectAccountData = {
+  id: true,
+  username: true,
+  nickname: true,
+  telephone: true,
+  email: true,
+  position: true,
+  isActive: true,
+  createdAt: true,
+  updatedAt: true,
+  createdBy: true,
+  updatedBy: true,
+  roles: {
+    include: {
+      role: true
+    }
+  },
+  salt: false,
+  password: false
+};
 
 @Injectable()
 export class AccountsService {
@@ -32,44 +53,26 @@ export class AccountsService {
           }))
         }
       },
-      include: {
-        roles: {
-          include: {
-            role: true
-          }
-        }
-      }
+      select: selectAccountData
     });
   }
 
   async findAll() {
     return this.prisma.account.findMany({
-      include: {
-        roles: {
-          include: {
-            role: true
-          }
-        }
-      }
+      select: selectAccountData
     });
   }
 
-  findOne(id: number): Promise<Account | null> {
+  findOne(id: number) {
     return this.prisma.account.findUnique({
       where: {
         id: id
       },
-      include: {
-        roles: {
-          include: {
-            role: true
-          }
-        }
-      }
+      select: selectAccountData
     });
   }
 
-  update(id: number, updateAccountDto: Prisma.AccountUpdateInput): Promise<Account> {
+  update(id: number, updateAccountDto: Prisma.AccountUpdateInput) {
     return this.prisma.account.update({
       where: {
         id: id
@@ -78,7 +81,7 @@ export class AccountsService {
     });
   }
 
-  remove(id: number): Promise<Account> {
+  remove(id: number) {
     return this.prisma.account.delete({
       where: {
         id: id
