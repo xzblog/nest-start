@@ -15,6 +15,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
     return next.handle().pipe(
       map(data => ({
         data,
+        success: true,
         code: context.switchToHttp().getResponse().statusCode,
         message: 'Success',
         timestamp: new Date().toISOString()
